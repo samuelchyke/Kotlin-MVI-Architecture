@@ -6,9 +6,11 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.myapplication.model.BlogPost
 import com.example.myapplication.model.User
+import com.example.myapplication.repository.Repository
 import com.example.myapplication.ui.main.state.MainStateEvent
 import com.example.myapplication.ui.main.state.MainViewState
 import com.example.myapplication.util.AbsentLiveData
+import com.example.myapplication.util.DataState
 
 class MainViewModel : ViewModel() {
     private val _stateEvent: MutableLiveData<MainStateEvent> = MutableLiveData()
@@ -17,7 +19,7 @@ class MainViewModel : ViewModel() {
     val viewState: LiveData<MainViewState>
         get() = _viewState
 
-    val dataState: LiveData<MainViewState> = Transformations
+    val dataState: LiveData<DataState<MainViewState>> = Transformations
         .switchMap(_stateEvent){ stateEvent ->
 
             stateEvent?.let {
@@ -26,16 +28,16 @@ class MainViewModel : ViewModel() {
 
         }
 
-    private fun handleStateEvent(stateEvent: MainStateEvent): LiveData<MainViewState> {
+    private fun handleStateEvent(stateEvent: MainStateEvent): LiveData<DataState<MainViewState>> {
 
         return when (stateEvent){
 
             is MainStateEvent.GetBlogPostsEvent ->{
-                AbsentLiveData.create()
+                return Repository.getBlogPosts()
 
             }
             is MainStateEvent.GetUserEvent ->{
-                AbsentLiveData.create()
+                return Repository.getUser(stateEvent.userId)
             }
             is MainStateEvent.None ->{
                 AbsentLiveData.create()
