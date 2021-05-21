@@ -7,7 +7,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.myapplication.R
-import com.example.myapplication.ui.main.state.MainStateEvent
+import com.example.myapplication.ui.DataStateListener
 import com.example.myapplication.ui.main.state.MainStateEvent.*
 
 class MainFragment : Fragment() {
@@ -37,17 +37,22 @@ class MainFragment : Fragment() {
     fun subscribeObservers(){
         viewModel.dataState.observe(viewLifecycleOwner, Observer{ dataState->
             println("DEBUG: DataState: $dataState")
+            // Handle data<T>
             dataStateHandler.onDataStateChange(dataState)
 
-            dataState.data?.let{ mainViewState ->
-                //set BlogPost data
-                mainViewState.blogPosts?.let {
-                    viewModel.setBlogListData(it)
+            dataState.data?.let{ event ->
+                event.getContentIfNotHandled()?.let { mainViewState ->
+                    //set BlogPost data
+                    mainViewState.blogPosts?.let {
+                        viewModel.setBlogListData(it)
+                    }
+
+                    mainViewState.user?.let {
+                        viewModel.setUser(it)
+                    }
+
                 }
 
-                mainViewState.user?.let {
-                    viewModel.setUser(it)
-                }
             }
 
         })

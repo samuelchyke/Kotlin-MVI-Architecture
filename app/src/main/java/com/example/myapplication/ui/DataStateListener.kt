@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.main
+package com.example.myapplication.ui
 
 import com.example.myapplication.util.DataState
 
