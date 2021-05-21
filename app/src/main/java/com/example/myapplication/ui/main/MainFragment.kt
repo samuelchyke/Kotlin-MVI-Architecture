@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.main
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.*
@@ -12,6 +13,8 @@ import com.example.myapplication.ui.main.state.MainStateEvent.*
 class MainFragment : Fragment() {
 
     lateinit var viewModel: MainViewModel
+
+    lateinit var dataStateHandler: DataStateListener
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,12 +31,14 @@ class MainFragment : Fragment() {
         viewModel = activity?.run {
             ViewModelProvider(this).get(MainViewModel::class.java)
         }?: throw Exception("Invalid Activity")
+        subscribeObservers()
     }
 
     fun subscribeObservers(){
         viewModel.dataState.observe(viewLifecycleOwner, Observer{ dataState->
-
             println("DEBUG: DataState: $dataState")
+            dataStateHandler.onDataStateChange(dataState)
+
             dataState.data?.let{ mainViewState ->
                 //set BlogPost data
                 mainViewState.blogPosts?.let {
@@ -79,5 +84,15 @@ class MainFragment : Fragment() {
 
     private fun triggerGetUserEvent() {
         viewModel.setStateEvent(GetUserEvent("1"))
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try{
+            dataStateHandler = context as DataStateListener
+        }catch(e: ClassCastException){
+            println("$context must implement DataStateListener")
+        }
+
     }
 }
