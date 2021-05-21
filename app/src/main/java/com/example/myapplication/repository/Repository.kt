@@ -9,65 +9,40 @@ import com.example.myapplication.ui.main.state.MainViewState
 import com.example.myapplication.util.*
 
 object Repository {
-    fun getBlogPosts(): LiveData<DataState<MainViewState>>{
-        return Transformations
-            .switchMap(MyRetrofitBuilder.apiService.getBlogPosts()){ apiResponse ->
-                object: LiveData<DataState<MainViewState>>(){
-                    override fun onActive() {
-                        super.onActive()
-                        when(apiResponse){
-                            is ApiSuccessResponse -> {
-                                value = DataState.data(
-                                    data = MainViewState(
-                                        blogPosts = apiResponse.body
-                                    )
-                                )
-                            }
-                            is ApiErrorResponse -> {
-                                value = DataState.error(
-                                    message = apiResponse.errorMessage
-                                )
-                            }
 
-                            is ApiEmptyResponse -> {
-                                value = DataState.error(
-                                    message = "HTTP 204. Returned NOTHING."
-                                )
-                            }
-                        }
-                    }
-                }
+    fun getBlogPosts(): LiveData<DataState<MainViewState>> {
+        return object: NetworkBoundResource<List<BlogPost>, MainViewState>(){
+
+            override fun handleApiSuccessResponse(response: ApiSuccessResponse<List<BlogPost>>) {
+                result.value = DataState.data(
+                    data = MainViewState(
+                        blogPosts = response.body
+                    )
+                )
             }
+
+            override fun createCall(): LiveData<GenericApiResponse<List<BlogPost>>> {
+                return MyRetrofitBuilder.apiService.getBlogPosts()
+            }
+
+        }.asLiveData()
     }
 
-    fun getUser(userId: String): LiveData<DataState<MainViewState>>{
-        return Transformations
-            .switchMap(MyRetrofitBuilder.apiService.getUser(userId)){ apiResponse ->
-                object: LiveData<DataState<MainViewState>>(){
-                    override fun onActive() {
-                        super.onActive()
-                        when(apiResponse){
-                            is ApiSuccessResponse -> {
-                                value = DataState.data(
-                                    data = MainViewState(
-                                        user = apiResponse.body
-                                    )
-                                )
-                            }
-                            is ApiErrorResponse -> {
-                                value = DataState.error(
-                                    message = apiResponse.errorMessage
-                                )
-                            }
+    fun getUser(userId: String): LiveData<DataState<MainViewState>> {
+        return object: NetworkBoundResource<User, MainViewState>(){
 
-                            is ApiEmptyResponse -> {
-                                value = DataState.error(
-                                    message = "HTTP 204. Returned NOTHING."
-                                )
-                            }
-                        }
-                    }
-                }
+            override fun handleApiSuccessResponse(response: ApiSuccessResponse<User>) {
+                result.value = DataState.data(
+                    data = MainViewState(
+                        user = response.body
+                    )
+                )
             }
+
+            override fun createCall(): LiveData<GenericApiResponse<User>> {
+                return MyRetrofitBuilder.apiService.getUser(userId)
+            }
+
+        }.asLiveData()
     }
 }
