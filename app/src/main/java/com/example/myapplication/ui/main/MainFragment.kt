@@ -6,15 +6,22 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.example.myapplication.model.BlogPost
 import com.example.myapplication.ui.DataStateListener
 import com.example.myapplication.ui.main.state.MainStateEvent.*
+import com.example.myapplication.util.TopSpacingItemDecoration
+import kotlinx.android.synthetic.main.fragment_main.*
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), BlogListAdapter.Interaction {
 
     lateinit var viewModel: MainViewModel
 
     lateinit var dataStateHandler: DataStateListener
+
+    lateinit var blogListAdapter: BlogListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,7 +38,19 @@ class MainFragment : Fragment() {
         viewModel = activity?.run {
             ViewModelProvider(this).get(MainViewModel::class.java)
         }?: throw Exception("Invalid Activity")
+
         subscribeObservers()
+        initRecyclerView()
+    }
+
+    private fun initRecyclerView(){
+        recycler_view.apply {
+            layoutManager = LinearLayoutManager(this@MainFragment.context)
+            blogListAdapter = BlogListAdapter(this@MainFragment)
+            val topSpacingDecorator = TopSpacingItemDecoration(30)
+            addItemDecoration(topSpacingDecorator)
+            adapter = blogListAdapter
+        }
     }
 
     fun subscribeObservers(){
@@ -45,6 +64,7 @@ class MainFragment : Fragment() {
                     //set BlogPost data
                     mainViewState.blogPosts?.let {
                         viewModel.setBlogListData(it)
+                        blogListAdapter.submitList(it)
                     }
 
                     mainViewState.user?.let {
@@ -99,5 +119,9 @@ class MainFragment : Fragment() {
             println("$context must implement DataStateListener")
         }
 
+    }
+
+    override fun onItemSelected(position: Int, item: BlogPost) {
+        TODO("Not yet implemented")
     }
 }
