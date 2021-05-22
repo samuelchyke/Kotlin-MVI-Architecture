@@ -21,11 +21,9 @@ class MainViewModel : ViewModel() {
 
     val dataState: LiveData<DataState<MainViewState>> = Transformations
         .switchMap(_stateEvent){ stateEvent ->
-
             stateEvent?.let {
                 handleStateEvent(it)
             }
-
         }
 
     private fun handleStateEvent(stateEvent: MainStateEvent): LiveData<DataState<MainViewState>> {

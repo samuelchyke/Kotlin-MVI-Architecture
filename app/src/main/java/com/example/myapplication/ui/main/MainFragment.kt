@@ -8,12 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.model.BlogPost
+import com.example.myapplication.model.User
 import com.example.myapplication.ui.DataStateListener
 import com.example.myapplication.ui.main.state.MainStateEvent.*
 import com.example.myapplication.util.TopSpacingItemDecoration
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.layout_blog_list_item.*
 
 class MainFragment : Fragment(), BlogListAdapter.Interaction {
 
@@ -53,6 +56,17 @@ class MainFragment : Fragment(), BlogListAdapter.Interaction {
         }
     }
 
+    private fun setUserProperties(user: User){
+        email.setText(user.email)
+        username.text = user.username
+
+        view?.let{
+            Glide.with(it.context)
+                .load(user.image)
+                .into(image)
+        }
+    }
+
     fun subscribeObservers(){
         viewModel.dataState.observe(viewLifecycleOwner, Observer{ dataState->
             println("DEBUG: DataState: $dataState")
@@ -80,10 +94,12 @@ class MainFragment : Fragment(), BlogListAdapter.Interaction {
         viewModel.viewState.observe(viewLifecycleOwner, Observer{ viewState->
                 viewState.blogPosts?.let{
                     println("DEBUG: Setting blog post to RecyclerView: $it")
+                    blogListAdapter.submitList(it)
                 }
 
                 viewState.user?.let{
                     println("DEBUG: Setting user data: $it")
+                    setUserProperties(it)
                 }
         })
     }
@@ -104,7 +120,7 @@ class MainFragment : Fragment(), BlogListAdapter.Interaction {
     }
 
     private fun triggerGetBlogsEvent() {
-        viewModel.setStateEvent(GetBlogPostsEvent())
+        viewModel.setStateEvent(GetBlogPostsEvent)
     }
 
     private fun triggerGetUserEvent() {
