@@ -29,10 +29,11 @@ data class DataState <T>(
         }
 
         fun <T> data(
+            message: String? = null,
             data: T? = null
         ): DataState<T> {
             return DataState(
-                message = null,
+                message = Event.messageEvent(message),
                 loading = false,
                 data = Event.dataEvent(data)
             )

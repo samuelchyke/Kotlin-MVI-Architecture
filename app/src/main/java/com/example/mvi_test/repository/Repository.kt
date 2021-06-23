@@ -1,14 +1,12 @@
 package com.example.mvi_test.repository
 
 import androidx.lifecycle.LiveData
-import com.example.mvi_test.util.ApiSuccessResponse
-import com.example.mvi_test.util.DataState
-import com.example.mvi_test.util.GenericApiResponse
-import com.example.myapplication.api.MyRetrofitBuilder
-import com.example.myapplication.model.BlogPost
-import com.example.myapplication.model.User
-import com.example.myapplication.repository.NetworkBoundResource
-import com.example.myapplication.ui.main.state.MainViewState
+import androidx.lifecycle.Transformations
+import com.example.mvi_test.api.MyRetrofitBuilder
+import com.example.mvi_test.model.BlogPost
+import com.example.mvi_test.model.User
+import com.example.mvi_test.ui.main.state.MainViewState
+import com.example.mvi_test.util.*
 
 object Repository {
 
@@ -17,8 +15,10 @@ object Repository {
 
             override fun handleApiSuccessResponse(response: ApiSuccessResponse<List<BlogPost>>) {
                 result.value = DataState.data(
-                    data = MainViewState(
-                        blogPosts = response.body
+                    null,
+                    MainViewState(
+                        blogPosts = response.body,
+                        user = null
                     )
                 )
             }
@@ -35,7 +35,9 @@ object Repository {
 
             override fun handleApiSuccessResponse(response: ApiSuccessResponse<User>) {
                 result.value = DataState.data(
-                    data = MainViewState(
+                    null,
+                    MainViewState(
+                        blogPosts = null,
                         user = response.body
                     )
                 )
@@ -48,3 +50,4 @@ object Repository {
         }.asLiveData()
     }
 }
+
