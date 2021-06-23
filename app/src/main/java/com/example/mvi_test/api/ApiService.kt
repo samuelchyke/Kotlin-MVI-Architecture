@@ -14,4 +14,5 @@ interface ApiService {
     fun getUser(
         @Path("userId") userId: String
     ): User
+
 }
