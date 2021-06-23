@@ -1,9 +1,9 @@
-package com.example.myapplication.repository
+package com.example.mvi_test.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.example.myapplication.util.*
-import com.example.myapplication.util.Constants.Companion.TESTING_NETWORK_DELAY
+import com.example.mvi_test.util.*
+import com.example.mvi_test.util.Constants.Companion.TESTING_NETWORK_DELAY
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope

@@ -1,4 +1,4 @@
-package com.example.myapplication.util
+package com.example.mvi_test.util
 import androidx.lifecycle.LiveData
 import retrofit2.Call
 import retrofit2.CallAdapter

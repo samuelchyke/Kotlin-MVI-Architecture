@@ -1,6 +1,6 @@
-package com.example.myapplication.ui
+package com.example.mvi_test.ui
 
-import com.example.myapplication.util.DataState
+import com.example.mvi_test.util.DataState
 
 interface DataStateListener {
 

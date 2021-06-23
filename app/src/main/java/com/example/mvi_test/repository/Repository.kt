@@ -1,12 +1,14 @@
-package com.example.myapplication.repository
+package com.example.mvi_test.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import com.example.mvi_test.util.ApiSuccessResponse
+import com.example.mvi_test.util.DataState
+import com.example.mvi_test.util.GenericApiResponse
 import com.example.myapplication.api.MyRetrofitBuilder
 import com.example.myapplication.model.BlogPost
 import com.example.myapplication.model.User
+import com.example.myapplication.repository.NetworkBoundResource
 import com.example.myapplication.ui.main.state.MainViewState
-import com.example.myapplication.util.*
 
 object Repository {
 

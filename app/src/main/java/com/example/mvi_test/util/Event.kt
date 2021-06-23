@@ -1,4 +1,4 @@
-package com.example.myapplication.util
+package com.example.mvi_test.util
 
 /**
  * Used as a wrapper for data that is exposed via a LiveData that represents an event.

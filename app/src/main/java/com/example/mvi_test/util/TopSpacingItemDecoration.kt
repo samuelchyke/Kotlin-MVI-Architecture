@@ -1,4 +1,4 @@
-package com.example.myapplication.util
+package com.example.mvi_test.util
 
 import android.graphics.Rect
 import android.view.View

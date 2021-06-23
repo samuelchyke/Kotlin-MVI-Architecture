@@ -1,4 +1,4 @@
-package com.example.myapplication.util
+package com.example.mvi_test.util
 
 data class DataState <T>(
     var message: Event<String>? = null,
@@ -10,7 +10,7 @@ data class DataState <T>(
 
         fun <T> error(
             message: String
-        ): DataState <T>{
+        ): DataState<T> {
             return DataState(
                 message = Event(message),
                 loading = false,
@@ -20,7 +20,7 @@ data class DataState <T>(
 
         fun <T> loading(
             isLoading: Boolean
-        ): DataState <T>{
+        ): DataState<T> {
             return DataState(
                 message = null,
                 loading = isLoading,
@@ -30,7 +30,7 @@ data class DataState <T>(
 
         fun <T> data(
             data: T? = null
-        ): DataState <T>{
+        ): DataState<T> {
             return DataState(
                 message = null,
                 loading = false,
